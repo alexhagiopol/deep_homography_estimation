@@ -16,8 +16,8 @@ visualize = False
 num_examples = 1000
 
 loc_list = glob("./ms_coco_test_images/*.jpg")
-X = []  # images
-Y = []  # labels
+X = np.zeros((128, 128, 2, num_examples))  # images
+Y = np.zeros((4, 2, num_examples))
 for i in range(num_examples):
     if i % 100 == 0:
         print("Created ", i, " examples.")
@@ -53,8 +53,8 @@ for i in range(num_examples):
     # make into dataset
     training_image = np.dstack((original_patch, warped_patch))
     H_four_points = np.subtract(np.array(perturbed_four_points), np.array(four_points))
-    X += [training_image]
-    Y += [H_four_points]
+    X[:, :, :, i] = training_image
+    Y[:, :, i] = H_four_points
 
     if visualize:
         plt.figure(figsize=(40, 20))
